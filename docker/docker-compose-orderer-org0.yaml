@@ -1,0 +1,112 @@
+version: '2'
+
+networks:
+  bcnet:
+    name: order-mgmt_bcnet
+
+services:
+
+  orderer0-org0:
+    extends:
+      file: base/orderer-base.yaml
+      service: orderer-base
+    container_name: orderer0-org0
+    environment:
+      - ORDERER_GENERAL_LISTENPORT=7050
+      # operation service(restful) 
+      - ORDERER_OPERATIONS_LISTENADDRESS=0.0.0.0:17050
+      - ORDERER_METRICS_PROVIDER=prometheus
+    networks:
+    - bcnet
+    volumes:
+        - ../system-genesis-block/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+        - ../organizations/ordererOrganizations/org0.company.com/orderers/orderer0-org0/msp:/var/hyperledger/orderer/msp
+        - ../organizations/ordererOrganizations/org0.company.com/orderers/orderer0-org0/tls/:/var/hyperledger/orderer/tls
+        - ../storage/org0/orderer0-org0:/var/hyperledger/production/orderer
+    ports:
+      - 7050:7050
+      - 17050:17050
+
+  orderer1-org0:
+    extends:
+      file: base/orderer-base.yaml
+      service: orderer-base
+    container_name: orderer1-org0
+    environment:
+      - ORDERER_GENERAL_LISTENPORT=8050
+      # operation service(restful) 
+      - ORDERER_OPERATIONS_LISTENADDRESS=0.0.0.0:18050
+      - ORDERER_METRICS_PROVIDER=prometheus
+    networks:
+    - bcnet
+    volumes:
+        - ../system-genesis-block/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+        - ../organizations/ordererOrganizations/org0.company.com/orderers/orderer1-org0/msp:/var/hyperledger/orderer/msp
+        - ../organizations/ordererOrganizations/org0.company.com/orderers/orderer1-org0/tls/:/var/hyperledger/orderer/tls
+        - ../storage/org0/orderer1-org0:/var/hyperledger/production/orderer
+    ports:
+    - 8050:8050
+    - 18050:18050
+
+  orderer2-org0:
+    extends:
+      file: base/orderer-base.yaml
+      service: orderer-base
+    container_name: orderer2-org0
+    environment:
+      - ORDERER_GENERAL_LISTENPORT=9050
+      # operation service(restful) 
+      - ORDERER_OPERATIONS_LISTENADDRESS=0.0.0.0:19050
+      - ORDERER_METRICS_PROVIDER=prometheus
+    networks:
+    - bcnet
+    volumes:
+        - ../system-genesis-block/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+        - ../organizations/ordererOrganizations/org0.company.com/orderers/orderer2-org0/msp:/var/hyperledger/orderer/msp
+        - ../organizations/ordererOrganizations/org0.company.com/orderers/orderer2-org0/tls/:/var/hyperledger/orderer/tls
+        - ../storage/org0/orderer2-org0:/var/hyperledger/production/orderer
+    ports:
+    - 9050:9050
+    - 19050:19050
+
+  # orderer3-org0:
+  #   extends:
+  #     file: base/orderer-base.yaml
+  #     service: orderer-base
+  #   container_name: orderer3-org0
+  #   environment:
+  #     # operation service(restful) 
+  #     - ORDERER_OPERATIONS_LISTENADDRESS=0.0.0.0:20050
+  #     - ORDERER_METRICS_PROVIDER=prometheus
+  #     - ORDERER_GENERAL_LISTENPORT=10050
+  #   networks:
+  #   - bcnet
+  #   volumes:
+  #       - ../system-genesis-block/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+  #       - ../organizations/ordererOrganizations/org0.company.com/orderers/orderer3-org0/msp:/var/hyperledger/orderer/msp
+  #       - ../organizations/ordererOrganizations/org0.company.com/orderers/orderer3-org0/tls/:/var/hyperledger/orderer/tls
+  #       - ../storage/org0/orderer3-org0:/var/hyperledger/production/orderer
+  #   ports:
+  #   - 10050:10050
+  #   - 20050:20050
+
+  # orderer4-org0:
+  #   extends:
+  #     file: base/orderer-base.yaml
+  #     service: orderer-base
+  #   container_name: orderer4-org0
+  #   environment:
+  #     # operation service(restful) 
+  #     - ORDERER_OPERATIONS_LISTENADDRESS=0.0.0.0:17050
+  #     - ORDERER_METRICS_PROVIDER=prometheus
+  #     - ORDERER_GENERAL_LISTENPORT=11050
+  #   networks:
+  #   - bcnet
+  #   volumes:
+  #       - ../system-genesis-block/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+  #       - ../organizations/ordererOrganizations/org0.company.com/orderers/orderer4-org0/msp:/var/hyperledger/orderer/msp
+  #       - ../organizations/ordererOrganizations/org0.company.com/orderers/orderer4-org0/tls/:/var/hyperledger/orderer/tls
+  #       - ../storage/org0/orderer4-org0:/var/hyperledger/production/orderer
+  #   ports:
+  #   - 11050:11050
+  #   - 21050:21050

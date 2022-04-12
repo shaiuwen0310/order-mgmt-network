@@ -1,0 +1,35 @@
+
+version: '2'
+
+networks:
+  bcnet:
+    name: order-mgmt_bcnet
+
+services:
+
+  cli:
+    container_name: cli
+    image: hyperledger/fabric-tools:2.2
+    tty: true
+    stdin_open: true
+    environment:
+      - TZ=Asia/Taipei
+      - FABRIC_LOGGING_SPEC=INFO
+      - CORE_PEER_ID=cli
+      - CORE_PEER_ADDRESS=peer0-org1:7051
+      - CORE_PEER_LOCALMSPID=Org1MSP
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/opt/hyperledger/fabric/crypto/peerOrganizations/org1.company.com/peers/peer0-org1/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/opt/hyperledger/fabric/crypto/peerOrganizations/org1.company.com/peers/peer0-org1/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/hyperledger/fabric/crypto/peerOrganizations/org1.company.com/peers/peer0-org1/tls/ca.crt
+      - CORE_PEER_MSPCONFIGPATH=/opt/hyperledger/fabric/crypto/peerOrganizations/org1.company.com/users/Admin0@org1.company.com/msp
+    working_dir: /opt/hyperledger/fabric
+    command: /bin/bash
+    volumes:
+        - ../organizations:/opt/hyperledger/fabric/crypto
+        - ../scripts:/opt/hyperledger/fabric/scripts
+        - ../channel-artifacts:/opt/hyperledger/fabric/channel-artifacts
+        - ../external-chaincode:/opt/hyperledger/fabric/external-chaincode
+        # - ../storage/cli:/opt/hyperledger/fabric
+    networks:
+      - bcnet

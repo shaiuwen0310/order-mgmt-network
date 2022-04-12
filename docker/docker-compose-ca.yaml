@@ -1,0 +1,79 @@
+version: '2'
+
+networks:
+  bcnet:
+    name: order-mgmt_bcnet
+
+services:
+
+  ca-org0:
+    image: hyperledger/fabric-ca:1.5
+    container_name: ca-org0
+    environment:
+      - TZ=Asia/Taipei
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca-org0
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_PORT=7054
+      - FABRIC_CA_SERVER_OPERATIONS_LISTENADDRESS=0.0.0.0:17054
+    ports:
+      - "7054:7054"
+      - "17054:17054"
+    command: sh -c 'fabric-ca-server start -b admin0:adminpw0 -d'
+    volumes:
+      - ../storage/org0/ca-org0:/etc/hyperledger/fabric-ca-server
+    networks:
+      - bcnet
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "1"
+
+  ca-org1:
+    image: hyperledger/fabric-ca:1.5
+    container_name: ca-org1
+    environment:
+      - TZ=Asia/Taipei
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca-org1
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_PORT=8054
+      - FABRIC_CA_SERVER_OPERATIONS_LISTENADDRESS=0.0.0.0:18054
+    ports:
+      - "8054:8054"
+      - "18054:18054"
+    command: sh -c 'fabric-ca-server start -b admin1:adminpw1 -d'
+    volumes:
+      - ../storage/org1/ca-org1:/etc/hyperledger/fabric-ca-server
+    networks:
+      - bcnet
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "1"
+
+  ca-org2:
+    image: hyperledger/fabric-ca:1.5
+    container_name: ca-org2
+    environment:
+      - TZ=Asia/Taipei
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca-org2
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_PORT=9054
+      - FABRIC_CA_SERVER_OPERATIONS_LISTENADDRESS=0.0.0.0:19054
+    ports:
+      - "9054:9054"
+      - "19054:19054"
+    command: sh -c 'fabric-ca-server start -b admin2:adminpw2 -d'
+    volumes:
+      - ../storage/org2/ca-org2:/etc/hyperledger/fabric-ca-server
+    networks:
+      - bcnet
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "1"

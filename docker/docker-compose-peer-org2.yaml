@@ -1,0 +1,68 @@
+
+version: '2'
+
+networks:
+  bcnet:
+    name: order-mgmt_bcnet
+
+services:
+
+  peer0-org2:
+    container_name: peer0-org2
+    extends:
+      file: base/peer-base.yaml
+      service: peer-base
+    environment:
+      # Peer specific variabes
+      - CORE_PEER_ID=peer0-org2
+      - CORE_PEER_ADDRESS=peer0-org2:9051
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:9051
+      - CORE_PEER_CHAINCODEADDRESS=peer0-org2:9052
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:9052
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1-org2:10051 #
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0-org2:9051
+      - CORE_PEER_LOCALMSPID=Org2MSP
+      # operation service(restful)
+      - CORE_OPERATIONS_LISTENADDRESS=0.0.0.0:19051
+      - CORE_METRICS_PROVIDER=prometheus
+    volumes:
+        - ../organizations/peerOrganizations/org2.company.com/peers/peer0-org2/msp:/etc/hyperledger/fabric/msp
+        - ../organizations/peerOrganizations/org2.company.com/peers/peer0-org2/tls:/etc/hyperledger/fabric/tls
+        - ../storage/org2/peer0-org2:/var/hyperledger/production
+        - ../sampleBuilder:/opt/hyperledger/ccaas_builder
+        - ../config/org2/core.yaml:/etc/hyperledger/fabric/core.yaml
+    ports:
+      - 9051:9051
+      - 19051:19051
+    networks:
+      - bcnet
+
+  peer1-org2:
+    container_name: peer1-org2
+    extends:
+      file: base/peer-base.yaml
+      service: peer-base
+    environment:
+      # Peer specific variabes
+      - CORE_PEER_ID=peer1-org2
+      - CORE_PEER_ADDRESS=peer1-org2:10051
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:10051
+      - CORE_PEER_CHAINCODEADDRESS=peer1-org2:10052
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:10052
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1-org2:10051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0-org2:9051 #
+      - CORE_PEER_LOCALMSPID=Org2MSP
+      # operation service(restful)
+      - CORE_OPERATIONS_LISTENADDRESS=0.0.0.0:20051
+      - CORE_METRICS_PROVIDER=prometheus
+    volumes:
+        - ../organizations/peerOrganizations/org2.company.com/peers/peer1-org2/msp:/etc/hyperledger/fabric/msp
+        - ../organizations/peerOrganizations/org2.company.com/peers/peer1-org2/tls:/etc/hyperledger/fabric/tls
+        - ../storage/org2/peer1-org2:/var/hyperledger/production
+        - ../sampleBuilder:/opt/hyperledger/ccaas_builder
+        - ../config/org2/core.yaml:/etc/hyperledger/fabric/core.yaml
+    ports:
+      - 10051:10051
+      - 20051:20051
+    networks:
+      - bcnet
